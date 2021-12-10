@@ -13,6 +13,9 @@ import AllPosts from "./screen/AllPosts";
 import KeyboardScreen from "./screen/Keyboard";
 import { Ionicons } from "@expo/vector-icons";
 
+import { PostsProvider } from "./context/postsContext";
+import { BadgeProvider } from "./context/badgeContext";
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const TopTab = createMaterialTopTabNavigator();
@@ -41,32 +44,36 @@ function HomeScreen() {
 function App() {
   const [homeBadge, setHomeBadge] = useState(99);
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+    <PostsProvider>
+      <BadgeProvider>
+        <NavigationContainer>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
 
-            if (route.name === "Home") {
-              iconName = focused ? "home" : "home-outline";
-            } else if (route.name === "Profile") {
-              iconName = focused ? "person" : "person-outline";
-            } else if (route.name === "Login") {
-              iconName = focused ? "camera" : "camera-outline";
-            }
-            return <Ionicons name={iconName} size={size} color={"black"} />;
-          },
-        })}
-      >
-        <Tab.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ tabBarBadge: homeBadge }}
-        />
-        <Tab.Screen name="Profile" component={Profile} />
-        <Tab.Screen name="Login" component={Login} />
-      </Tab.Navigator>
-    </NavigationContainer>
+                if (route.name === "Home") {
+                  iconName = focused ? "home" : "home-outline";
+                } else if (route.name === "Profile") {
+                  iconName = focused ? "person" : "person-outline";
+                } else if (route.name === "Login") {
+                  iconName = focused ? "camera" : "camera-outline";
+                }
+                return <Ionicons name={iconName} size={size} color={"black"} />;
+              },
+            })}
+          >
+            <Tab.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{ tabBarBadge: homeBadge }}
+            />
+            <Tab.Screen name="Profile" component={Profile} />
+            <Tab.Screen name="Login" component={Login} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </BadgeProvider>
+    </PostsProvider>
   );
 }
 
